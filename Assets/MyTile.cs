@@ -10,10 +10,20 @@ public class MyTile: MonoBehaviour
     public int typeOfCell;
     private TileVisuals tileVisuals;
     private SpriteRenderer sp;
-    
-    
+    private MouseManager _mouseManager;
+
+    public bool isBuilding = false;
+    public bool isBlocked = false;
+    public bool isResource = false;
+    private void OnMouseOver()
+    {
+        
+        _mouseManager.mousePosGrid = position;
+    }
+
     public void Init()
     {
+        _mouseManager = GameObject.FindWithTag("MouseManager").GetComponent<MouseManager>();
         tileVisuals = GameObject.FindWithTag("TileVisuals").GetComponent<TileVisuals>();
         sp = GetComponent<SpriteRenderer>();
         sp.sprite = tileVisuals.GetSprite(typeOfCell);
