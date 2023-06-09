@@ -19,16 +19,21 @@ public class TileManager : MonoBehaviour
     public static float GLOBAL_HEIGHT;
     public static float GLOBAL_WIDTH;
     public static Vector2 GLOBAL_GRID_START;
+    public static int PylonRange = 4;
     [SerializeField] int width;
     [SerializeField] int height;
 
     [SerializeField] private GameObject CellPreFab;
     private Vector2 startingPoint;
 
-    
+
+    [Header("Energy")] private Vector2 mainCore;
     // Start is called before the first frame update
-    
-    
+
+    public void EndedTurn()
+    {
+        CheckEnergy();
+    }
     
     void Start()
     {
@@ -39,6 +44,9 @@ public class TileManager : MonoBehaviour
         GLOBAL_HEIGHT = height;
         startingPoint = transform.position;
         InitMap(); 
+        mainCore = Vector2.zero;
+        SetMainCore();
+        
     }
 
     void InitMap()
@@ -53,11 +61,13 @@ public class TileManager : MonoBehaviour
             for (int j = 0; j < width; j++)
             {
                 map[i][j] = 1;
+                if (j == 13 && i == 8) map[i][j] = 11;
                 GameObject newGameObject = Instantiate(CellPreFab, currentCellPos, Quaternion.identity);
                 MyTile temp = newGameObject.GetComponent<MyTile>();
                 temp.typeOfCell = map[i][j];
                 temp.position = new Vector2(i, j);
-                temp.Init();
+                temp.Init(this);
+                
                 allTiles[i][j] = temp;
                 
                 currentCellPos.x += CELLSIZE;
@@ -98,5 +108,88 @@ public class TileManager : MonoBehaviour
     {
         allTiles[(int)cellPos.x][(int)cellPos.y].UpdateTile(newCellTyp);
 
+    }
+
+    public bool IsPoweredPylonInRange(Vector2 pos)
+    {
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+
+        if (x > 0) return allTiles[x - 1][y].IsPoweredPylon();
+        if (x != width-1) return allTiles[x + 1][y].IsPoweredPylon();
+        if (x > 0 && y > 0) return allTiles[x - 1][y-1].IsPoweredPylon();
+        if (y > 0) return allTiles[x][y-1].IsPoweredPylon();
+        if (x != width-1 && y > 0) return allTiles[x + 1][y-1].IsPoweredPylon();
+        if (x != width-1 && y != height-1) return allTiles[x + 1][y+1].IsPoweredPylon();
+        if (x > 0 && y != height-1) return allTiles[x - 1][y+1].IsPoweredPylon();
+        if (y != height-1) return allTiles[x][y+1].IsPoweredPylon();
+        return false;
+    }
+
+    public void SetMainCore()
+    {
+        if (mainCore == Vector2.zero)
+        {
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (allTiles[i][j].typeOfCell == 11)
+                    {
+                        mainCore = new Vector2(i, j);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public void CheckEnergy()
+    {
+        List < MyTile > allPylons= new List<MyTile>();
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if (allTiles[i][j].typeOfCell == 15)
+                {
+                    allPylons.Add(allTiles[i][j]);
+                }
+            }
+        }
+
+        bool changed = true;
+        while (changed == true)
+        {
+            changed = false;
+            foreach (var pylon in allPylons)
+            {
+                
+                if ((pylon.position - mainCore).magnitude <= PylonRange &&
+                    !pylon.isPowered)
+                {
+                    pylon.isPowered = true;
+                    changed = true;
+                }
+
+                if (pylon.isPowered)
+                {
+                    foreach (var secondayPylon in allPylons)
+                    {
+                        if (secondayPylon.position == pylon.position) continue;
+                        if (secondayPylon.isPowered) continue;
+                        if((pylon.position - secondayPylon.position).magnitude <= PylonRange)
+                        {
+                            secondayPylon.isPowered = true;
+                            changed = true;
+                        }
+                        else
+                        {
+                            secondayPylon.isPowered = false;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

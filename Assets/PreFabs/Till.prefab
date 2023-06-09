@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84eb8ffc30f76784aa0f1f133894f60f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _resourceManager: {fileID: 4473677803156346670, guid: f4af452c4b0311d40916097d9e9ef8a8, type: 3}
   position: {x: 0, y: 0}
   typeOfCell: 0
   isBuilding: 0

@@ -36,6 +36,8 @@ public class BuildingManager : MonoBehaviour
             test = false;
             StartPlaceBuilding(0);
         }
+
+        if (Input.GetMouseButton(1) && placingBuilding) CancelPlacBuilding();
         if (placingBuilding)UpdateBuildingPositon();
         if (placingBuilding && Input.GetMouseButton(0)
                             && _tileManager.TileAvailable(currentBuildingId, _mouseManager.mousePosGrid)
@@ -43,8 +45,9 @@ public class BuildingManager : MonoBehaviour
             PlaceBuilding();
     }
 
-    void StartPlaceBuilding(int buildingId)
+    public void StartPlaceBuilding(int buildingId)
     {
+        
         _mouseManager.mousePosGrid = new Vector2(-1,-1);
         placingBuilding = true;
         currentBuildingId = buildingId;
@@ -53,6 +56,7 @@ public class BuildingManager : MonoBehaviour
         //     new Vector3(_mouseManager.mousePosGrid.x, _mouseManager.mousePosGrid.y, -1);
         MyTile tempFile = currentTempGameObjekt.GetComponent<MyTile>();
         tempFile.typeOfCell = 2;
+        tempFile.Init(_tileManager);
         tempFile.Start();
         
     }
@@ -90,6 +94,14 @@ public class BuildingManager : MonoBehaviour
     {
         if (!_resourceManager.HasEnoughResourcesFor(currentBuildingId)) return;
         _tileManager.ChangeCell(_mouseManager.mousePosGrid, currentBuildingId);
+        placingBuilding = false;
+        currentBuildingId = -1;
+        _tileManager.CheckEnergy();
+        Destroy(currentTempGameObjekt);
+    }
+
+    void CancelPlacBuilding()
+    {
         placingBuilding = false;
         currentBuildingId = -1;
         Destroy(currentTempGameObjekt);

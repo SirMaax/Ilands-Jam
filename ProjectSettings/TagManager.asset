@@ -7,6 +7,7 @@ TagManager:
   - TileVisuals
   - MouseManager
   - BuildingClass
+  - TileManager
   layers:
   - Default
   - TransparentFX
