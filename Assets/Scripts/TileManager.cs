@@ -7,25 +7,32 @@ using UnityEngine.Tilemaps;
 
 public class TileManager : MonoBehaviour
 {
+    
+    [Header("Refs")]
+    private BuildingClass _buildingClass;
+    
+    
     private int[][] map;
     MyTile[][] allTiles;
     [SerializeField] float CELLSIZE;
     public static float GLOBAL_CELLSIZE;
     public static float GLOBAL_HEIGHT;
     public static float GLOBAL_WIDTH;
+    public static Vector2 GLOBAL_GRID_START;
     [SerializeField] int width;
     [SerializeField] int height;
 
     [SerializeField] private GameObject CellPreFab;
     private Vector2 startingPoint;
 
-    private BuildingClass _buildingClass;
+    
     // Start is called before the first frame update
     
     
     
     void Start()
     {
+        GLOBAL_GRID_START = transform.position;
         _buildingClass = GameObject.FindWithTag("BuildingClass").GetComponent<BuildingClass>();
         GLOBAL_CELLSIZE = CELLSIZE;
         GLOBAL_WIDTH = width;
@@ -62,6 +69,7 @@ public class TileManager : MonoBehaviour
 
     public bool TileAvailable(int buldingId, Vector2 position)
     {
+        if(position.x == -1)return false;
         int xCoord = (int) position.x;
         int yCoord = (int) position.y;
         //Exists building there
@@ -80,5 +88,15 @@ public class TileManager : MonoBehaviour
     }
     
     // Update is called once per frame
+    public Vector2 GetRealWorldCoordinates(Vector2 tiles)
+    {
+        return allTiles[(int)tiles.x][(int)tiles.y].transform.position;
 
+    }
+
+    public void ChangeCell(Vector2 cellPos, int newCellTyp)
+    {
+        allTiles[(int)cellPos.x][(int)cellPos.y].UpdateTile(newCellTyp);
+
+    }
 }
