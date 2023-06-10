@@ -11,10 +11,7 @@ public class TileVisuals : MonoBehaviour
 
     public void Start()
     {
-        foreach (var sprite in allSprites)
-        {
-            // sprite.
-        }
+
     }
 
     public Sprite GetSprite(int typeOfCell)

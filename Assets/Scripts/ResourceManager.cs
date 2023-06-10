@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    
-    
+
+    [SerializeField] private bool test;
     [SerializeField] private int[] resources;
     // Start is called before the first frame update
     void Start()
@@ -166,5 +166,16 @@ public class ResourceManager : MonoBehaviour
             resources[res.Research]++;
             
         }
+    }
+
+    public bool DecreaseIfEnough(int resource, int amount = 1)
+    {
+        if (test) return true;
+        if (resources[resource] - amount >= 0)
+        {
+            resources[resource] -= amount;
+            return true;
+        }
+        return false;
     }
 }

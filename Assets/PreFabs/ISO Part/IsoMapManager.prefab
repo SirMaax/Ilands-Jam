@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9090650657871321564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9090650657871321566}
+  - component: {fileID: 9090650657871321567}
+  m_Layer: 0
+  m_Name: IsoMapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9090650657871321566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9090650657871321564}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.1657848, y: -0.31558365, z: -0.8086087}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9090650657871321567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9090650657871321564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c5d841980a492b4b9592264e85e0a44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseTilePrefab: {fileID: 8476358371662352972, guid: 7a2877f7c42f49648bd8f452e2cde877, type: 3}
+  firstTile: {x: 0.34, y: -0.55}
+  amountSignTiles: 0
+  forbiddenPrefab: {fileID: 0}
+  allowedPrefab: {fileID: 0}
+  prefabTiles:
+  - {fileID: 11400000, guid: 78755d8fcf4c7f74cafff6ab8086d206, type: 2}
+  - {fileID: 11400000, guid: a4629e5cabd584845a690f2ae9a3d7c5, type: 2}
+  - {fileID: 11400000, guid: cfee8b03be07f5147abbdfb8ed199ad5, type: 2}
+  - {fileID: 11400000, guid: 346567a3650dd5642a36023153ca630c, type: 2}
+  - {fileID: 11400000, guid: 346567a3650dd5642a36023153ca630c, type: 2}
+  - {fileID: 11400000, guid: 346567a3650dd5642a36023153ca630c, type: 2}
+  - {fileID: 11400000, guid: 346567a3650dd5642a36023153ca630c, type: 2}
+  tilemap: {fileID: 0}

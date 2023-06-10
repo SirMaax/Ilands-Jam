@@ -8,6 +8,8 @@ TagManager:
   - MouseManager
   - BuildingClass
   - TileManager
+  - UnitManager
+  - Unit
   layers:
   - Default
   - TransparentFX
