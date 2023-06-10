@@ -15,7 +15,13 @@ public class ResourceManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        resources = new int[11];
+        if (test)
+        {
+            for (int i = 0; i < resources.Length; i++)
+            {
+                resources[i] = 99;
+            }
+        }
     }
 
     // Update is called once per frame

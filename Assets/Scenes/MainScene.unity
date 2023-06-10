@@ -4192,7 +4192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &816486821
 Transform:
   m_ObjectHideFlags: 0
@@ -5751,7 +5751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1028353009
 Transform:
   m_ObjectHideFlags: 0
@@ -10900,6 +10900,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: resources.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[0]
+      value: 
+      objectReference: {fileID: 666996187}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[1]
+      value: 
+      objectReference: {fileID: 80374189}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[2]
+      value: 
+      objectReference: {fileID: 368394064}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[3]
+      value: 
+      objectReference: {fileID: 1702642059}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[4]
+      value: 
+      objectReference: {fileID: 28728038}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[5]
+      value: 
+      objectReference: {fileID: 1903479655}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[6]
+      value: 
+      objectReference: {fileID: 477993382}
+    - target: {fileID: 1417200026077085761, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[7]
+      value: 
+      objectReference: {fileID: 87804652}
     - target: {fileID: 1417200026077085763, guid: 4d3abdca4b6b2cc45861069742a2ceec, type: 3}
       propertyPath: m_Name
       value: ResourceManager2
@@ -11092,9 +11132,53 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: resources.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[0]
+      value: 
+      objectReference: {fileID: 430107312}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[1]
+      value: 
+      objectReference: {fileID: 711294577}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[2]
+      value: 
+      objectReference: {fileID: 1373287396}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[3]
+      value: 
+      objectReference: {fileID: 1928611704}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[4]
+      value: 
+      objectReference: {fileID: 2038407069}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[5]
+      value: 
+      objectReference: {fileID: 849221474}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[6]
+      value: 
+      objectReference: {fileID: 94209806}
+    - target: {fileID: 8539706324537539998, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: howMuchOfEachResource.Array.data[7]
+      value: 
+      objectReference: {fileID: 465955223}
     - target: {fileID: 8539706324537539999, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
       propertyPath: m_Name
       value: ResourceManager1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539706324537539999, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95ed91674930b0e4bafd348009fd1320, type: 3}
