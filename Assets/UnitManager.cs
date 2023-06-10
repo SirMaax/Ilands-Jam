@@ -21,22 +21,31 @@ public class UnitManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentSelectedUnit != null && Input.GetMouseButton(1)) CancelClickingOnUnit();
+        if (currentSelectedUnit != null && Input.GetMouseButton(1)
+            && ViewManager.inIosView) CancelClickingOnUnit();
     }
 
     public void ClickedOnThisUnit(Unit unit)
     {
+        
         if (unit.hasMovedThisTurn) return;
+        if (currentSelectedUnit != null)
+        {
+            CancelClickingOnUnit();
+        }
         currentSelectedUnit = unit;
         if(!unit.hasMovedThisTurn)_isoMapManager.ShowIfCanMoveTo(unit.position,unit.range);
-        DisableCollidersOfOthers();
+        // DisableCollidersOfOthers();
+        unit.SetStatusOfCollider(false);
     }
 
     public void CancelClickingOnUnit()
     {
+        currentSelectedUnit.SetStatusOfCollider(true);
         currentSelectedUnit = null;
         _isoMapManager.RemoveAllSignTiles();
-        EnableAllCollidersOfOthers();
+        
+        // EnableAllCollidersOfOthers();
     }
 
     public void ClickedOnThisTile(Vector2 pos)

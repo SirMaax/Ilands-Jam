@@ -6,6 +6,8 @@ using UnityEngine;
 public class BuildingClass : MonoBehaviour
 {
     [SerializeField] private int[] resourceBuildings;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +17,6 @@ public class BuildingClass : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public bool ResourceBuilding(int buildingId)
@@ -28,4 +29,6 @@ public class BuildingClass : MonoBehaviour
         //Do something
         return false;
     }
+
+
 }

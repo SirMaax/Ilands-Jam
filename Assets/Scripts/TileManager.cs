@@ -10,8 +10,10 @@ public class TileManager : MonoBehaviour
     
     [Header("Refs")]
     private BuildingClass _buildingClass;
-    
-    
+
+    [Header("Refs")]
+    [SerializeField] private GameObject container;
+        
     private int[][] map;
     MyTile[][] allTiles;
     [SerializeField] float CELLSIZE;
@@ -30,9 +32,17 @@ public class TileManager : MonoBehaviour
     [Header("Energy")] private Vector2 mainCore;
     // Start is called before the first frame update
 
-    public void EndedTurn()
+    public void EndTurn()
     {
         CheckEnergy();
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                allTiles[i][j].Turn();
+            }
+        }
+        
     }
     
     void Start()
@@ -63,6 +73,7 @@ public class TileManager : MonoBehaviour
                 map[i][j] = 1;
                 if (j == 13 && i == 8) map[i][j] = 11;
                 GameObject newGameObject = Instantiate(CellPreFab, currentCellPos, Quaternion.identity);
+                newGameObject.transform.SetParent(container.transform);
                 MyTile temp = newGameObject.GetComponent<MyTile>();
                 temp.typeOfCell = map[i][j];
                 temp.position = new Vector2(i, j);

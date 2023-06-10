@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -9,6 +10,8 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField] private bool test;
     [SerializeField] private int[] resources;
+
+    [SerializeField] private TMP_Text[] howMuchOfEachResource;
     // Start is called before the first frame update
     void Start()
     {
@@ -177,5 +180,17 @@ public class ResourceManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void EndTurn()
+    {
+        howMuchOfEachResource[0].SetText(resources[res.CopperOre].ToString()); 
+        howMuchOfEachResource[1].SetText(resources[res.IronOre].ToString());
+        howMuchOfEachResource[2].SetText(resources[res.UraniumOre].ToString());
+        howMuchOfEachResource[3].SetText(resources[res.Steel].ToString());
+        howMuchOfEachResource[4].SetText(resources[res.Ammo].ToString());
+        howMuchOfEachResource[5].SetText(resources[res.Nuke].ToString());
+        howMuchOfEachResource[6].SetText(resources[res.Research].ToString());
+        howMuchOfEachResource[7].SetText(resources[res.Energy].ToString());
     }
 }

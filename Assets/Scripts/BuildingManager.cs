@@ -36,7 +36,7 @@ public class BuildingManager : MonoBehaviour
             test = false;
             StartPlaceBuilding(0);
         }
-
+        
         if (Input.GetMouseButton(1) && placingBuilding) CancelPlacBuilding();
         if (placingBuilding)UpdateBuildingPositon();
         if (placingBuilding && Input.GetMouseButton(0)

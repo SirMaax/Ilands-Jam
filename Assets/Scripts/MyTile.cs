@@ -49,7 +49,7 @@ public class MyTile: MonoBehaviour
 
     private void Update()
     {
-        Turn();
+        
     }
 
     public void UpdateSprite()

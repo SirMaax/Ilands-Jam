@@ -20,7 +20,7 @@ public class Unit : MonoBehaviour
     
     [Header("Mech Attributes")]
     [SerializeField] public int range;
-
+    [SerializeField] public int mechId;
 
     [Header("REfs")] 
     [SerializeField] private ResourceManager _resourceManager;

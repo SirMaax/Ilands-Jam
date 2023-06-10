@@ -11,6 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Unit start2;
     [SerializeField] private Unit start3;
 
+    [Header("Refs")] [SerializeField] private TileManager TileManager1;
+    [SerializeField] private TileManager TileManager2;
+        [SerializeField] private ResourceManager ResourceManager1;
+        [SerializeField] private ResourceManager ResourceManager2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +30,10 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
-        
+        TileManager1.EndTurn();
+        TileManager2.EndTurn();
+        ResourceManager1.EndTurn();
+        ResourceManager2.EndTurn();
     }
 
     private void StartOnObjects()
@@ -34,5 +42,7 @@ public class GameManager : MonoBehaviour
         start2.OwnStart();
         start3.OwnStart();
     }
+    
+    
 }
 
