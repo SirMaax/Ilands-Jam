@@ -10,6 +10,7 @@ public class BaseTile : MonoBehaviour
     public bool blocked = false;
     public int typeOfTile;
     public bool isInMoveRange;
+    public bool EnemySpawning;
     
     [Header("Refs")] 
     private UnitManager _unitManager;

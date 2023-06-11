@@ -10,7 +10,7 @@ public class IsoMapManager : MonoBehaviour
     [SerializeField] private Vector2 testVector;
     [SerializeField] private int testRange;
 
-    [Header("Map Stuff")] private BaseTile[][] allTiles;
+    [Header("Map Stuff")] public BaseTile[][] allTiles;
     private int[][] typeofTiles;
     public static int WIDTH = 8;
     public static int HEIGHT = 8;
@@ -18,15 +18,16 @@ public class IsoMapManager : MonoBehaviour
     [SerializeField] private Vector2 firstTile;
     [SerializeField] private int TILEMAP_START_X;
     [SerializeField] private int TILEMAP_START_y;
-
+    
 
     [Header("Tiles")] [SerializeField] private TileBase[] prefabTiles;
-
+    private List<Vector2> dontRemoveTileSign;
     [SerializeField] public Tilemap tilemap;
 
     // Start is called before the first frame update
     public void OwnStart()
     {
+        dontRemoveTileSign = new List<Vector2>();
         Quaternion rot = new Quaternion(-0.463689953f, 0.18706049f, 0.323998272f, 0.803134561f);
         allTiles = new BaseTile[HEIGHT][];
         typeofTiles = new int[HEIGHT][];
@@ -70,6 +71,12 @@ public class IsoMapManager : MonoBehaviour
 
     public void AddTileAt(int x, int y, int tileId, int layer)
     {
+        if (allTiles[x][y].EnemySpawning && tileId != 11) return;
+        if (dontRemoveTileSign.Contains(new Vector2(x, y))) return;
+        if (tileId == 9)
+        {
+            dontRemoveTileSign.Add(new Vector2(x,y));
+        }
         Vector3Int pos = new Vector3Int(TILEMAP_START_X + y, TILEMAP_START_y - x, layer);
         tilemap.SetTile(pos, prefabTiles[tileId]);
     }
@@ -94,7 +101,7 @@ public class IsoMapManager : MonoBehaviour
                 {
                     if (allTiles[i][j].isInMoveRange)
                     {
-                        if(!allMarkedTiles.Contains(allTiles[i][j])) allMarkedTiles.Add(allTiles[i][j]);
+                        if (!allMarkedTiles.Contains(allTiles[i][j])) allMarkedTiles.Add(allTiles[i][j]);
                     }
                 }
             }
@@ -102,47 +109,61 @@ public class IsoMapManager : MonoBehaviour
             foreach (var ele in allMarkedTiles)
             {
                 if (ele.blocked && ele.position != isogridPos) continue;
-                if(ele.position == isogridPos)MarkAllNeighborsOf2((int) ele.position.x, (int)ele.position.y);
-                else MarkAllNeighborsOf((int) ele.position.x, (int)ele.position.y);
+                if (ele.position == isogridPos) MarkAllNeighborsOf2((int)ele.position.x, (int)ele.position.y);
+                else MarkAllNeighborsOf((int)ele.position.x, (int)ele.position.y);
             }
         }
+
         foreach (var ele in allMarkedTiles)
         {
-            if (ele.position == isogridPos) continue;
+            if (ele.position == isogridPos)
+            {
+                if (!dontRemoveTileSign.Contains(ele.position))
+                {
+                AddTileAt((int)ele.position.x, (int)ele.position.y, 8, 2);
+                continue;
+                }
+            }
+
             if (ele.blocked) AddTileAt((int)ele.position.x, (int)ele.position.y, 1, 2);
             else AddTileAt((int)ele.position.x, (int)ele.position.y, 2, 2);
         }
-        RemoveTileAt(x,y,2);
+        // RemoveTileAt(x,y,2);
     }
+
 
     public void MarkAllNeighborsOf(int i, int j)
     {
-        if (i != 0 && !allTiles[i - 1][j].blocked) allTiles[i - 1][j].isInMoveRange = true;
-        else if (i != 0 && allTiles[i - 1][j].blocked) AddTileAt(i - 1, j, 1, 2);
-        if (i != 7 && !allTiles[i + 1][j].blocked) allTiles[i + 1][j].isInMoveRange = true;
-        else if (i != 7 && !allTiles[i + 1][j].blocked)AddTileAt(i + 1, j, 1, 2);
-        if (j != 0 && !allTiles[i ][j - 1].blocked) allTiles[i][j - 1].isInMoveRange = true;
-        else  if (j != 0 && !allTiles[i ][j - 1].blocked)AddTileAt(i, j -1, 1, 2);
-        if (j != 7 && !allTiles[i ][j + 1].blocked) allTiles[i][j + 1].isInMoveRange = true;
-        else if (j != 7 && !allTiles[i ][j + 1].blocked)AddTileAt(i, j +1, 1, 2);
+        if (i != 0) allTiles[i - 1][j].isInMoveRange = true;
+        // else if (i != 0 && allTiles[i - 1][j].blocked) AddTileAt(i - 1, j, 1, 2);
+        if (i != 7) allTiles[i + 1][j].isInMoveRange = true;
+        // else if (i != 7 && !allTiles[i + 1][j].blocked) AddTileAt(i + 1, j, 1, 2);
+        if (j != 0 ) allTiles[i][j - 1].isInMoveRange = true;
+        // else if (j != 0 && !allTiles[i][j - 1].blocked) AddTileAt(i, j - 1, 1, 2);
+        if (j != 7 ) allTiles[i][j + 1].isInMoveRange = true;
+        // else if (j != 7 && !allTiles[i][j + 1].blocked) AddTileAt(i, j + 1, 1, 2);
     }
-    
     public void MarkAllNeighborsOf2(int i, int j)
     {
         if (i != 0 && !allTiles[i - 1][j].blocked) allTiles[i - 1][j].isInMoveRange = true;
         if (i != 7 && !allTiles[i + 1][j].blocked) allTiles[i + 1][j].isInMoveRange = true;
-        if (j != 0 && !allTiles[i ][j - 1].blocked) allTiles[i][j - 1].isInMoveRange = true;
-        if (j != 7 && !allTiles[i ][j + 1].blocked) allTiles[i][j + 1].isInMoveRange = true;
+        if (j != 0 && !allTiles[i][j - 1].blocked) allTiles[i][j - 1].isInMoveRange = true;
+        if (j != 7 && !allTiles[i][j + 1].blocked) allTiles[i][j + 1].isInMoveRange = true;
     }
-    
+
     public void RemoveAllSignTiles()
     {
         for (int i = 0; i < HEIGHT; i++)
         {
             for (int j = 0; j < WIDTH; j++)
             {
-                RemoveTileAt(i, j, 2);
-                allTiles[i][j].isInMoveRange = false;
+                if (allTiles[i][j].EnemySpawning) continue;
+                if (!dontRemoveTileSign.Contains(new Vector2(i,j)))
+                {
+                    RemoveTileAt(i, j, 2);
+                    allTiles[i][j].isInMoveRange = false;
+                    
+                }
             }
         }
     }
@@ -154,7 +175,7 @@ public class IsoMapManager : MonoBehaviour
 
         allTiles[x][y].blocked = true;
     }
-    
+
     public void TileXisNowLongerBlocked(Vector2 isogridPos)
     {
         int x = (int)isogridPos.x;
@@ -162,4 +183,98 @@ public class IsoMapManager : MonoBehaviour
 
         allTiles[x][y].blocked = false;
     }
+
+    public Vector2 CanReach(Vector2 pos, Vector2 targetPos, int range, bool differentMode = false)
+    {
+        Vector2 result = new Vector2(-1, -1);
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        List<BaseTile> allVisitedTiles = new List<BaseTile>();
+        allVisitedTiles.Add(allTiles[x][y]);
+        for (int k = 0; k <= range; k++)
+        {
+            for (int i = 0; i < HEIGHT; i++)
+            {
+                for (int j = 0; j < WIDTH; j++)
+                {
+                    if (allVisitedTiles.Contains(allTiles[i][j]))
+                    {
+                        if (i != 0 && !allTiles[i - 1][j].blocked && !allVisitedTiles.Contains(allTiles[i - 1][j]))
+                            allVisitedTiles.Add(allTiles[i - 1][j]);
+                        if (i != 7 && !allTiles[i + 1][j].blocked && !allVisitedTiles.Contains(allTiles[i + 1][j]))
+                            allVisitedTiles.Add(allTiles[i + 1][j]);
+                        if (j != 0 && !allTiles[i][j - 1].blocked && !allVisitedTiles.Contains(allTiles[i][j - 1]))
+                            allVisitedTiles.Add(allTiles[i][j - 1]);
+                        if (j != 7 && !allTiles[i][j + 1].blocked && !allVisitedTiles.Contains(allTiles[i][j + 1]))
+                            allVisitedTiles.Add(allTiles[i][j + 1]);
+                    }
+                }
+            }
+        }
+
+        int goalx = (int)targetPos.x;
+        int goaly = (int)targetPos.y;
+        Vector2 first = new Vector2(goalx - 1, goaly);
+        Vector2 second = new Vector2(goalx + 1, goaly);
+        Vector2 third = new Vector2(goalx , goaly - 1);
+        Vector2 fourth = new Vector2(goalx , goaly + 1);
+        int minDistance = 100;
+        
+        foreach (var ele in allVisitedTiles)
+        {
+            if (differentMode)
+            {
+                if ((ele.position - targetPos).magnitude < minDistance)
+                {
+                    minDistance = (int)(ele.position - targetPos).magnitude;
+                    result = ele.position;
+                }
+                
+            }
+
+            else
+            {
+                if (ele.position == first) return first;
+                if (ele.position == second) return second;
+                if (ele.position == third) return third;
+                if (ele.position == fourth) return fourth;
+            }
+            
+        }
+
+        return result;
+    }
+
+    public void EndTurn()
+    {
+        dontRemoveTileSign.Clear();
+        RemoveAllSignTiles();
+        
+    }
+
+    public void RemoveAllTiles()
+    {
+        dontRemoveTileSign.Clear();
+        RemoveAllSignTiles();
+    }
+
+    public void RemoveOwnTile(int x, int y)
+    {
+        if(!dontRemoveTileSign.Contains(new Vector2(x,y)))
+        {
+            RemoveTileAt(x,y,2);
+        }
+    }
+
+    public void BeforeSwitchingMechs()
+    {
+        for (int i = 0; i < HEIGHT; i++)
+        {
+            for (int j = 0; j < WIDTH; j++)
+            {
+                allTiles[i][j].isInMoveRange = false;
+            }
+        }
+    }
+
 }

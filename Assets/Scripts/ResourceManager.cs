@@ -22,17 +22,17 @@ public class ResourceManager : MonoBehaviour
                 resources[i] = 99;
             }
         }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateGraphics();
     }
 
     public bool HasEnoughResourcesFor(int building)
     {
-        if (GameManager.TESTING) return true;
         switch (building)
         {
             case res.CopperOre://Copper mine 1 Steel
@@ -179,7 +179,6 @@ public class ResourceManager : MonoBehaviour
 
     public bool DecreaseIfEnough(int resource, int amount = 1)
     {
-        if (test) return true;
         if (resources[resource] - amount >= 0)
         {
             resources[resource] -= amount;
@@ -188,7 +187,7 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public void EndTurn()
+    public void UpdateGraphics()
     {
         howMuchOfEachResource[0].SetText(resources[res.CopperOre].ToString()); 
         howMuchOfEachResource[1].SetText(resources[res.IronOre].ToString());

@@ -13,13 +13,18 @@ public class ViewManager : MonoBehaviour
     [SerializeField] private GameObject PlacingButtons2;
     [SerializeField] private GameObject ResourceBar1;
     [SerializeField] private GameObject ResourceBar2;
-
+    [SerializeField] private GameObject IsoMetricCanvas;
     
         [Header("Refs")] 
     [SerializeField] private UnitManager _unitManager;
     
     [Header("ISOSTUFF")] 
     [SerializeField] private GameObject buttonForSwitching;
+
+    [Header("Mech UI")] 
+    [SerializeField] private GameObject MechStuff1;
+    [SerializeField] private GameObject MechStuff2;
+
     void Start()
     {
         
@@ -53,16 +58,21 @@ public class ViewManager : MonoBehaviour
 
             }
             IsometricStuff.SetActive(false);
+            IsoMetricCanvas.SetActive(false);
+
         }
         else
         {
+            
             inIosView = true;
+            IsoMetricCanvas.SetActive(true);
             IsometricStuff.SetActive(true);
             CityStuff2.SetActive(false);
             CityStuff1.SetActive(false);
             PlacingButtons2.SetActive(false);
             PlacingButtons1.SetActive(false);
             ResourceBar1.SetActive(false); 
+            ResourceBar2.SetActive(false); 
 
 
         }
@@ -73,5 +83,17 @@ public class ViewManager : MonoBehaviour
     {
         if (_unitManager.currentSelectedUnit != null) buttonForSwitching.SetActive(true);
         else buttonForSwitching.SetActive(false);
+    }
+
+    public void SwitchToMechView(int id)
+    {
+        if(id == 1)MechStuff1.SetActive(true);
+        else MechStuff2.SetActive(true);
+    }
+    
+    public void LeaveMechView()
+    {
+        MechStuff1.SetActive(false);
+        MechStuff2.SetActive(false);
     }
 }

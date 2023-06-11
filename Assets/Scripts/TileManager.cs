@@ -70,7 +70,7 @@ public class TileManager : MonoBehaviour
             allTiles[i] = new MyTile[width];
             for (int j = 0; j < width; j++)
             {
-                map[i][j] = 1;
+                map[i][j] = 0;
                 if (j == 13 && i == 8) map[i][j] = 11;
                 GameObject newGameObject = Instantiate(CellPreFab, currentCellPos, Quaternion.identity);
                 newGameObject.transform.SetParent(container.transform);

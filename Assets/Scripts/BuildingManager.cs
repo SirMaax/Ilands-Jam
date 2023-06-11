@@ -55,6 +55,7 @@ public class BuildingManager : MonoBehaviour
         // currentTempGameObjekt.transform.position =
         //     new Vector3(_mouseManager.mousePosGrid.x, _mouseManager.mousePosGrid.y, -1);
         MyTile tempFile = currentTempGameObjekt.GetComponent<MyTile>();
+        currentTempGameObjekt.GetComponent<SpriteRenderer>().sortingOrder = 1;
         tempFile.typeOfCell = 2;
         tempFile.Init(_tileManager);
         tempFile.Start();
