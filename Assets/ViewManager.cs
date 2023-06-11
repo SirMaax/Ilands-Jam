@@ -14,8 +14,8 @@ public class ViewManager : MonoBehaviour
     [SerializeField] private GameObject ResourceBar1;
     [SerializeField] private GameObject ResourceBar2;
     [SerializeField] private GameObject IsoMetricCanvas;
-    
-        [Header("Refs")] 
+    [SerializeField] private GameObject GeneralBuilding;
+            [Header("Refs")] 
     [SerializeField] private UnitManager _unitManager;
     
     [Header("ISOSTUFF")] 
@@ -42,6 +42,7 @@ public class ViewManager : MonoBehaviour
         {
             inIosView = false;
             int mechId = _unitManager.currentSelectedUnit.mechId;
+            GeneralBuilding.SetActive(true);
             if(mechId==1)
             {
             
@@ -63,7 +64,7 @@ public class ViewManager : MonoBehaviour
         }
         else
         {
-            
+            GeneralBuilding.SetActive(false);
             inIosView = true;
             IsoMetricCanvas.SetActive(true);
             IsometricStuff.SetActive(true);

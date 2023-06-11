@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
@@ -14,12 +15,15 @@ public class BuildingManager : MonoBehaviour
     [SerializeField]private MouseManager _mouseManager;
     [SerializeField]private TileManager _tileManager;
     [SerializeField]private ResourceManager _resourceManager;
+    [SerializeField] private TMP_Text description;
+    [SerializeField] private string[] descriptions;
     
     [Header("PlacingStuff")]
     [SerializeField] private GameObject tilePrefab;
     private GameObject currentTempGameObjekt;
     private bool placingBuilding = false;
     private int currentBuildingId;
+    private bool cooldown = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,13 +45,20 @@ public class BuildingManager : MonoBehaviour
         if (placingBuilding)UpdateBuildingPositon();
         if (placingBuilding && Input.GetMouseButton(0)
                             && _tileManager.TileAvailable(currentBuildingId, _mouseManager.mousePosGrid)
-                            && _mouseManager.MouseIsInField())
+                            && _mouseManager.MouseIsInField()
+                            && cooldown)
             PlaceBuilding();
     }
 
     public void StartPlaceBuilding(int buildingId)
     {
-        
+        if (placingBuilding)
+        {
+            CancelPlacBuilding();
+        }
+        cooldown = false;
+        StartCoroutine(StartCooldown());
+        description.SetText(descriptions[buildingId]);
         _mouseManager.mousePosGrid = new Vector2(-1,-1);
         placingBuilding = true;
         currentBuildingId = buildingId;
@@ -62,6 +73,12 @@ public class BuildingManager : MonoBehaviour
         
     }
 
+    IEnumerator StartCooldown()
+    {
+        yield return new WaitForSeconds(0.1f);
+        cooldown = true;
+    }
+    
     private void UpdateBuildingPositon()
     {
         if(_mouseManager.mousePosGrid.x != -1)
@@ -94,15 +111,18 @@ public class BuildingManager : MonoBehaviour
     void PlaceBuilding()
     {
         if (!_resourceManager.HasEnoughResourcesFor(currentBuildingId)) return;
+        if (_mouseManager.mousePosGrid.x == -1) return;
         _tileManager.ChangeCell(_mouseManager.mousePosGrid, currentBuildingId);
         placingBuilding = false;
         currentBuildingId = -1;
         _tileManager.CheckEnergy();
+        description.SetText("");
         Destroy(currentTempGameObjekt);
     }
 
     void CancelPlacBuilding()
     {
+        description.SetText("");
         placingBuilding = false;
         currentBuildingId = -1;
         Destroy(currentTempGameObjekt);

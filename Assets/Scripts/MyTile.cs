@@ -96,6 +96,9 @@ public class MyTile: MonoBehaviour
             case 10://Research
                 _resourceManager.Research();
                 break;
+            case res.Energy://Research
+                _resourceManager.Increase(res.Energy,2);
+                break;
         }
     }
 

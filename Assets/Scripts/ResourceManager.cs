@@ -60,11 +60,11 @@ public class ResourceManager : MonoBehaviour
                     return true;
                 }
                 break;
-            case res.Steel://Steel Production -1 iron ore 2 steel
-                if (resources[res.IronOre] - 1 >= 0
-                    && resources[res.Steel] - 2>= 0)
+            case res.Steel://Steel Production -1 Copper and -1 iron
+                if (resources[res.CopperOre] - 1 >= 0
+                    && resources[res.IronOre] - 1>= 0)
                 {
-                    resources[res.Steel] -= 2;
+                    resources[res.CopperOre] -= 1;
                     resources[res.IronOre]--;
                     return true;
                 }
