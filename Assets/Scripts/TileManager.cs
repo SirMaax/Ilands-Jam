@@ -216,5 +216,17 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    public static bool TileIsInMap(Vector2 pos)
+    {
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        
+        if (x < 0) return false;
+        if (y < 0) return false;
+        if (x > GLOBAL_HEIGHT - 1) return false;
+        if (y > GLOBAL_WIDTH - 1) return false;
+
+        return true;
+    }
 
 }

@@ -34,7 +34,8 @@ public class BaseTile : MonoBehaviour
     
     private void OnMouseOver()
     {
-        if (Input.GetMouseButton(0) && !blocked && isInMoveRange)
+        if (_unitManager.currentSelectedUnit == null) return;
+        if (Input.GetMouseButton(0) && !blocked && (isInMoveRange || _unitManager.currentSelectedUnit.attacking > 0))
         {
             //Clicked on Unit
             

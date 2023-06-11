@@ -19,4 +19,6 @@ public class TileVisuals : MonoBehaviour
         if (allSprites.Length < typeOfCell) return allSprites[0];
         return allSprites[typeOfCell];
     }
+    
+    
 }

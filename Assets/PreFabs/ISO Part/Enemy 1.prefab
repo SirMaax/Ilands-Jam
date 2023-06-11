@@ -53,7 +53,7 @@ MonoBehaviour:
   hasMovedThisTurn: 0
   nextTarget: {fileID: 0}
   nextPostion: {x: 0, y: 0}
-  health: 3
+  health: 2
   dmg: 1
   typeOfEnemy: 0
   range: 2

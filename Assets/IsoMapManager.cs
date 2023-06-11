@@ -277,4 +277,49 @@ public class IsoMapManager : MonoBehaviour
         }
     }
 
+    public bool AreNeighbors(Vector2 first, Vector2 second)
+    {
+        return (Mathf.Abs(first.x - second.x) == 1 ^
+            Mathf.Abs(first.y - second.y) == 1);
+    }
+
+    public void AddExplosion(int x, int y, int tileId, int layer)
+    {
+        Vector3Int pos = new Vector3Int(TILEMAP_START_X + y, TILEMAP_START_y - x, layer);
+        tilemap.SetTile(pos, prefabTiles[tileId]);
+        StartCoroutine(RemoveEplosionAt(x, y, layer));
+    }
+
+    private IEnumerator RemoveEplosionAt(int x, int y, int layer)
+    {
+        yield return new WaitForSeconds(2f);
+        Vector3Int pos = new Vector3Int(TILEMAP_START_X + y, TILEMAP_START_y - x, layer);
+        tilemap.SetTile(pos, null);
+    }
+    
+    public static bool TileIsInMap(Vector2 pos)
+    {
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        
+        if (x < 0) return false;
+        if (y < 0) return false;
+        if (x > HEIGHT - 1) return false;
+        if (y > WIDTH - 1) return false;
+
+        return true;
+    }
+    
+    public void ShowAttackCoordinates(Vector2 pos)
+    {
+       RemoveAllTiles();
+
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        
+        if(TileIsInMap(pos + new Vector2(1, 0)))AddTileAt(x+1,y,13,2);
+        if(TileIsInMap(pos + new Vector2(-1, 0)))AddTileAt(x-1,y,13,2);
+        if(TileIsInMap(pos + new Vector2(0, 1)))AddTileAt(x,y+1,13,2);
+        if(TileIsInMap(pos + new Vector2(0, -1)))AddTileAt(x,y-1,13,2);
+    }
 }

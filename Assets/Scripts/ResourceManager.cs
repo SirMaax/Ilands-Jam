@@ -13,6 +13,8 @@ public class ResourceManager : MonoBehaviour
     private int[] resources;
 
     [SerializeField] private TMP_Text[] howMuchOfEachResource;
+    [SerializeField] private TMP_Text[] howMuchOfEachResource2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -201,5 +203,17 @@ public class ResourceManager : MonoBehaviour
         howMuchOfEachResource[4].SetText(resources[res.Ammo].ToString());
         howMuchOfEachResource[5].SetText(resources[res.Nuke].ToString());
         howMuchOfEachResource[6].SetText(resources[res.Energy].ToString());
+        
+        howMuchOfEachResource2[0].SetText(resources[res.Energy].ToString());
+        howMuchOfEachResource2[1].SetText(resources[res.Steel].ToString());
+        howMuchOfEachResource2[2].SetText(resources[res.Ammo].ToString());
+        howMuchOfEachResource2[3].SetText(resources[res.Nuke].ToString());
     }
+
+    public bool EnoughResources(int res, int amount)
+    {
+        return resources[res] - amount >= 0;
+    }
+    
+    
 }

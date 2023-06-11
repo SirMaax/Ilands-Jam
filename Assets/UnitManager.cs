@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,10 +13,10 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private IsoMapManager _isoMapManager;
     [SerializeField] private EnemyManager _enemyManager;
     [SerializeField] private ViewManager _viewManager;
-    
+    [SerializeField] private TMP_Text descriptionField;
     [Header("Arrays")] 
-    [SerializeField] public Unit[] mechs;
-    [SerializeField] private Unit[] buildings;
+    [SerializeField] public List<Unit> mechs;
+    [SerializeField] private List<Unit> buildings;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,8 +28,11 @@ public class UnitManager : MonoBehaviour
     {
         if (currentSelectedUnit != null && Input.GetMouseButton(1)
             && ViewManager.inIosView) CancelClickingOnUnit();
+        
     }
-
+    
+    
+    
     public void ClickedOnThisUnit(Unit unit)
     {
         StartCoroutine(CoolDownBeforeCanInteract(unit));
@@ -43,6 +47,8 @@ public class UnitManager : MonoBehaviour
         {
             CancelClickingOnUnit();
         }
+        descriptionField.SetText("Unit can move once per turn.\n Cost one energy");
+
         _isoMapManager.BeforeSwitchingMechs();
         _isoMapManager.RemoveAllSignTiles();
         currentSelectedUnit = unit;
@@ -57,15 +63,36 @@ public class UnitManager : MonoBehaviour
         currentSelectedUnit = null;
         _isoMapManager.RemoveAllSignTiles();
         _viewManager.LeaveMechView();
-        // EnableAllCollidersOfOthers();
+        descriptionField.SetText("");
+        // EnableAllCollidersOfOthers();j
     }
 
     public void ClickedOnThisTile(Vector2 pos)
     {
         if (currentSelectedUnit != null)
         {
+            if (currentSelectedUnit.attacking > 0)
+            {
+                //Check if tile is neighbor of unit
+                if (_isoMapManager.AreNeighbors(currentSelectedUnit.position, pos))
+                {
+                    if (currentSelectedUnit.attacking  == 1)
+                    {
+                        currentSelectedUnit.Attack(pos - currentSelectedUnit.position);
+                    }
+                    else
+                    {
+                        currentSelectedUnit.AttackRanged(pos - currentSelectedUnit.position);
+                    }
+                }
+                CancelClickingOnUnit();
+            }
+            else
+            {
             currentSelectedUnit.MoveToPos(pos);
             CancelClickingOnUnit();
+                
+            }
         }
     }
 
@@ -164,4 +191,63 @@ public class UnitManager : MonoBehaviour
             mech.EndTurn();
         }
     }
+
+    public bool DamageBeingAt(Vector2 pos, int dmg)
+    {
+        foreach (var mech in mechs)
+        {
+            if (mech.position == pos)
+            {
+                mech.Damage(dmg);
+                return true;
+            }
+        }
+        foreach (var mech in buildings)
+        {
+            if (mech.position == pos) {
+                mech.Damage(dmg);
+                return true;
+            }
+        }
+        foreach (var mech in _enemyManager.allEnemies)
+        {
+            if (mech.position == pos){
+                mech.Damage(dmg);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void Remove(Unit unit)
+    {
+        foreach (var mech in mechs)
+        {
+            if (mech == unit)
+            {
+                mechs.Remove(mech);
+            }
+        }
+        
+        foreach (var mech in buildings)
+        {
+            if (mech == unit)
+            {
+                mechs.Remove(mech);
+            }
+        }
+        foreach (var mech in _enemyManager.allEnemies)
+        {
+            if (mech == unit)
+            {
+                mechs.Remove(mech);
+            }
+        }
+    }
+
+    public void AttackModeTurnedOn()
+    {
+        _isoMapManager.ShowAttackCoordinates(currentSelectedUnit.position);
+    }
+  
 }
