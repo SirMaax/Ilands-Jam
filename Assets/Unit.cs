@@ -116,6 +116,7 @@ public class Unit : MonoBehaviour
             _isoMapManager.TileXisNowLongerBlocked(position);
             UpdatePosition(newPos);
             hasMovedThisTurn = true;
+            SetStatusOfCollider(true);
         }
     }
 
@@ -174,6 +175,7 @@ public class Unit : MonoBehaviour
         else
         {//MECH CASE
             hasMovedThisTurn = false;
+            SetStatusOfCollider(true);
         }
     }
 

@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,17 +10,18 @@ public class ResourceManager : MonoBehaviour
 {
 
     [SerializeField] private bool test;
-    [SerializeField] private int[] resources;
+    private int[] resources;
 
     [SerializeField] private TMP_Text[] howMuchOfEachResource;
     // Start is called before the first frame update
     void Start()
     {
+        resources = new int[18];
         if (test)
         {
             for (int i = 0; i < resources.Length; i++)
             {
-                resources[i] = 99;
+                resources[i] = 15;
             }
         }
         
@@ -113,7 +115,7 @@ public class ResourceManager : MonoBehaviour
                 }
                 break;
         }
-        return true;
+        return false;
     }
 
     public void Increase(int typeOfWork, int amount = 1)
@@ -137,6 +139,7 @@ public class ResourceManager : MonoBehaviour
                     {
                         resources[res.IronOre] -= amount;
                         resources[res.Steel]++;
+                        resources[res.Energy] -= 2; 
                     }
 
                     break;
@@ -146,6 +149,7 @@ public class ResourceManager : MonoBehaviour
                     {
                         resources[res.Steel] -= amount;
                         resources[res.Ammo]++;
+                        resources[res.Energy] -= 1; 
                     }
 
                     break;
@@ -158,7 +162,8 @@ public class ResourceManager : MonoBehaviour
                         resources[res.UraniumOre] -= amount;
                         resources[res.Steel] -= 2;
                         resources[res.Ammo]--;
-                        resources[res.Ammo]++;
+                        resources[res.Nuke]++;
+                        resources[res.Energy] -= 3; 
                     }
 
                     break;
@@ -195,7 +200,6 @@ public class ResourceManager : MonoBehaviour
         howMuchOfEachResource[3].SetText(resources[res.Steel].ToString());
         howMuchOfEachResource[4].SetText(resources[res.Ammo].ToString());
         howMuchOfEachResource[5].SetText(resources[res.Nuke].ToString());
-        howMuchOfEachResource[6].SetText(resources[res.Research].ToString());
-        howMuchOfEachResource[7].SetText(resources[res.Energy].ToString());
+        howMuchOfEachResource[6].SetText(resources[res.Energy].ToString());
     }
 }

@@ -38,8 +38,7 @@ public class UnitManager : MonoBehaviour
     IEnumerator CoolDownBeforeCanInteract(Unit unit)
     {
         yield return new WaitForSeconds(0.1f);
-        if (!unit.hasMovedThisTurn)
-        {
+        
         if (currentSelectedUnit != null)
         {
             CancelClickingOnUnit();
@@ -48,10 +47,8 @@ public class UnitManager : MonoBehaviour
         _isoMapManager.RemoveAllSignTiles();
         currentSelectedUnit = unit;
         if (!unit.hasMovedThisTurn) _isoMapManager.ShowIfCanMoveTo(unit.position, unit.range);
-        // DisableCollidersOfOthers();
         unit.SetStatusOfCollider(false);
         _viewManager.SwitchToMechView(unit.mechId);
-        } 
     }
     
     public void CancelClickingOnUnit()

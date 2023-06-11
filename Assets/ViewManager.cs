@@ -11,13 +11,13 @@ public class ViewManager : MonoBehaviour
     [SerializeField] private GameObject IsometricStuff;
     [SerializeField] private GameObject PlacingButtons1;
     [SerializeField] private GameObject PlacingButtons2;
-    [SerializeField] private GameObject ResourceBar1;
-    [SerializeField] private GameObject ResourceBar2;
     [SerializeField] private GameObject IsoMetricCanvas;
     [SerializeField] private GameObject GeneralBuilding;
             [Header("Refs")] 
     [SerializeField] private UnitManager _unitManager;
-    
+
+            [SerializeField] private GameObject resource1; 
+            [SerializeField] private GameObject resource2; 
     [Header("ISOSTUFF")] 
     [SerializeField] private GameObject buttonForSwitching;
 
@@ -48,13 +48,13 @@ public class ViewManager : MonoBehaviour
             
                 CityStuff1.SetActive(true);
                 PlacingButtons1.SetActive(true);
-                ResourceBar1.SetActive(true); 
+                resource1.SetActive(true);
             }
             else
             {
                 CityStuff2.SetActive(true);
                 PlacingButtons2.SetActive(true);
-                ResourceBar2.SetActive(true); 
+                resource2.SetActive(true);
 
 
             }
@@ -64,6 +64,10 @@ public class ViewManager : MonoBehaviour
         }
         else
         {
+            resource1.SetActive(false);
+
+            resource2.SetActive(false);
+
             GeneralBuilding.SetActive(false);
             inIosView = true;
             IsoMetricCanvas.SetActive(true);
@@ -72,8 +76,6 @@ public class ViewManager : MonoBehaviour
             CityStuff1.SetActive(false);
             PlacingButtons2.SetActive(false);
             PlacingButtons1.SetActive(false);
-            ResourceBar1.SetActive(false); 
-            ResourceBar2.SetActive(false); 
 
 
         }

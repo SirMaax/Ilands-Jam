@@ -8,7 +8,7 @@ public class MyTile: MonoBehaviour
 {
     [Header("Refs")]
     private MouseManager _mouseManager;
-    [SerializeField] ResourceManager _resourceManager;
+    private ResourceManager _resourceManager;
     private TileManager _tileManager;
     
     [Header("Own Attributes")]
@@ -35,13 +35,16 @@ public class MyTile: MonoBehaviour
         tileVisuals = GameObject.FindWithTag("TileVisuals").GetComponent<TileVisuals>();
         sp = GetComponent<SpriteRenderer>();
         sp.sprite = tileVisuals.GetSprite(typeOfCell);
-        if (typeOfCell > 3) isBuilding = true;
+        if (typeOfCell == 16 || typeOfCell == 17) isBlocked = true;
+        else if (typeOfCell > 3 && typeOfCell < 19) isBuilding = true;
         else if (typeOfCell > 18) isResource = true;
+        isPowered = false;
     }
 
-    public void Init(TileManager tileManager)
+    public void Init(TileManager tileManager, ResourceManager resourceManager)
     {
         _tileManager = tileManager;
+        _resourceManager = resourceManager;
 
         gameObject.transform.localScale = new Vector3(TileManager.GLOBAL_CELLSIZE, TileManager.GLOBAL_CELLSIZE, 1);
         
@@ -54,8 +57,10 @@ public class MyTile: MonoBehaviour
 
     public void UpdateSprite()
     {
-        
-        sp.sprite = tileVisuals.GetSprite(typeOfCell);
+        if (typeOfCell == 11) return;
+        Debug.Log(typeOfCell);
+        if (typeOfCell == 15 && !isPowered) sp.sprite = tileVisuals.GetSprite(22);
+        else sp.sprite = tileVisuals.GetSprite(typeOfCell);
     }
 
     public void UpdateTile(int newtype)
@@ -72,7 +77,7 @@ public class MyTile: MonoBehaviour
 
     public void Turn()
     {
-        if (!IsInPylonRange() || !isPowered) return;
+        if (!IsInPylonRange()) return;
         switch (typeOfCell)
         {
             case 4://Copper
@@ -96,8 +101,8 @@ public class MyTile: MonoBehaviour
             case 10://Research
                 _resourceManager.Research();
                 break;
-            case res.Energy://Research
-                _resourceManager.Increase(res.Energy,2);
+            case 18://Research
+                _resourceManager.Increase(18,2);
                 break;
         }
     }
@@ -109,7 +114,7 @@ public class MyTile: MonoBehaviour
 
     public bool IsPoweredPylon()
     {
-        return typeOfCell == 15 && isPowered || typeOfCell == 11 || typeOfCell == 12;
+        return (typeOfCell == 15 && isPowered) || typeOfCell == 11 || typeOfCell == 12;
     }
 
 

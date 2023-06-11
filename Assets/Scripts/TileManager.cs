@@ -10,7 +10,8 @@ public class TileManager : MonoBehaviour
     
     [Header("Refs")]
     private BuildingClass _buildingClass;
-
+    [SerializeField] private ResourceManager _resourceManager;
+    
     [Header("Refs")]
     [SerializeField] private GameObject container;
         
@@ -21,7 +22,7 @@ public class TileManager : MonoBehaviour
     public static float GLOBAL_HEIGHT;
     public static float GLOBAL_WIDTH;
     public static Vector2 GLOBAL_GRID_START;
-    public static int PylonRange = 4;
+    public static int PylonRange = 3;
     [SerializeField] int width;
     [SerializeField] int height;
 
@@ -70,14 +71,17 @@ public class TileManager : MonoBehaviour
             allTiles[i] = new MyTile[width];
             for (int j = 0; j < width; j++)
             {
-                map[i][j] = 0;
-                if (j == 13 && i == 8) map[i][j] = 11;
+                map[i][j] = 1;
+                if (j == 7 && i == 4) map[i][j] = 11;
+                if (j == 0 && i == 0) map[i][j] = 20;
                 GameObject newGameObject = Instantiate(CellPreFab, currentCellPos, Quaternion.identity);
                 newGameObject.transform.SetParent(container.transform);
                 MyTile temp = newGameObject.GetComponent<MyTile>();
+                
                 temp.typeOfCell = map[i][j];
                 temp.position = new Vector2(i, j);
-                temp.Init(this);
+                temp.Init(this,_resourceManager);
+                    
                 
                 allTiles[i][j] = temp;
                 
@@ -93,18 +97,19 @@ public class TileManager : MonoBehaviour
         if(position.x == -1)return false;
         int xCoord = (int) position.x;
         int yCoord = (int) position.y;
-        //Exists building there
-        if (allTiles[xCoord][yCoord].isBuilding) return false;
+        MyTile tile = allTiles[xCoord][yCoord];
 
-        //If river or mountain exists there
-        if (allTiles[xCoord][yCoord].isBlocked) return false;
-        
-        //If resource and fits to resource TODO adjust ResourceBuildingMethod
-        if (allTiles[xCoord][yCoord].isResource && _buildingClass.ResourceBuilding(buldingId))
+        if (tile.isBuilding) return false;
+        if (tile.isBlocked) return false;
+        if (tile.isResource)
         {
-            if (_buildingClass.CanMineResource(buldingId, allTiles[xCoord][yCoord].typeOfCell)) return true;
+            if (tile.typeOfCell == 19 && buldingId == 5) return true;
+            if (tile.typeOfCell == 20 && buldingId == 4) return true;
+            if (tile.typeOfCell == 21 && buldingId == 6) return true;
+            return false;
         }
-        
+
+        if (buldingId == 4 || buldingId == 5 || buldingId == 6) return false;
         return true;
     }
     
@@ -118,7 +123,7 @@ public class TileManager : MonoBehaviour
     public void ChangeCell(Vector2 cellPos, int newCellTyp)
     {
         allTiles[(int)cellPos.x][(int)cellPos.y].UpdateTile(newCellTyp);
-
+        
     }
 
     public bool IsPoweredPylonInRange(Vector2 pos)
@@ -126,14 +131,15 @@ public class TileManager : MonoBehaviour
         int x = (int)pos.x;
         int y = (int)pos.y;
 
-        if (x > 0) return allTiles[x - 1][y].IsPoweredPylon();
-        if (x != width-1) return allTiles[x + 1][y].IsPoweredPylon();
-        if (x > 0 && y > 0) return allTiles[x - 1][y-1].IsPoweredPylon();
-        if (y > 0) return allTiles[x][y-1].IsPoweredPylon();
-        if (x != width-1 && y > 0) return allTiles[x + 1][y-1].IsPoweredPylon();
-        if (x != width-1 && y != height-1) return allTiles[x + 1][y+1].IsPoweredPylon();
-        if (x > 0 && y != height-1) return allTiles[x - 1][y+1].IsPoweredPylon();
-        if (y != height-1) return allTiles[x][y+1].IsPoweredPylon();
+
+        if (x > 0 && allTiles[x - 1][y].IsPoweredPylon()) return true;
+        if (x != height-1   && allTiles[x + 1][y].IsPoweredPylon())return true;
+        if (x > 0 && y > 0 && allTiles[x - 1][y-1].IsPoweredPylon())return true;
+        if (y > 0  && allTiles[x][y-1].IsPoweredPylon())return true;
+        if (x != height-1 && y > 0 &&  allTiles[x + 1][y-1].IsPoweredPylon())return true;
+        if (x != height-1 && y != width-1 &&  allTiles[x + 1][y+1].IsPoweredPylon())return true;
+        if (x > 0 && y != width-1        &&  allTiles[x - 1][y+1].IsPoweredPylon())return true;
+        if (y != width-1                  && allTiles[x][y+1].IsPoweredPylon())return true;
         return false;
     }
 
@@ -162,7 +168,7 @@ public class TileManager : MonoBehaviour
         {
             for (int j = 0; j < width; j++)
             {
-                if (allTiles[i][j].typeOfCell == 15)
+                if (allTiles[i][j].typeOfCell == 15 || allTiles[i][j].typeOfCell == 11)
                 {
                     allPylons.Add(allTiles[i][j]);
                 }
@@ -193,6 +199,7 @@ public class TileManager : MonoBehaviour
                         {
                             secondayPylon.isPowered = true;
                             changed = true;
+                            
                         }
                         else
                         {
@@ -202,5 +209,12 @@ public class TileManager : MonoBehaviour
                 }
             }
         }
+
+        foreach (var pylon in allPylons)
+        {
+            pylon.UpdateSprite();
+        }
     }
+
+
 }
