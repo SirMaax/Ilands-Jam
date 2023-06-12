@@ -26,7 +26,13 @@ public class ResourceManager : MonoBehaviour
                 resources[i] = 15;
             }
         }
-        
+
+        resources[res.Energy] = 3;
+        resources[res.Steel] = 3;
+        resources[res.CopperOre] = 3;
+        resources[res.Ammo] = 3;
+
+
     }
 
     // Update is called once per frame

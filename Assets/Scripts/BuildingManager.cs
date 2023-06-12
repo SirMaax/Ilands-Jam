@@ -1,10 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Build;
 using UnityEngine;
 
 public class BuildingManager : MonoBehaviour
@@ -124,6 +119,7 @@ public class BuildingManager : MonoBehaviour
             
             _tileManager.CheckEnergy();
         }
+        SoundManager.Play(6);
     }
 
     void CancelPlacBuilding()

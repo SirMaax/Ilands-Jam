@@ -16,7 +16,8 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private TMP_Text descriptionField;
     [Header("Arrays")] 
     [SerializeField] public List<Unit> mechs;
-    [SerializeField] private List<Unit> buildings;
+    [SerializeField] public List<Unit> buildings;
+    public bool nukeReady = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,13 +43,20 @@ public class UnitManager : MonoBehaviour
     IEnumerator CoolDownBeforeCanInteract(Unit unit)
     {
         yield return new WaitForSeconds(0.1f);
-        
+        SoundManager.Play(3);
         if (currentSelectedUnit != null)
         {
             CancelClickingOnUnit();
         }
-        descriptionField.SetText("Unit can move once per turn.\n Cost one energy");
 
+        nukeReady = false;
+        if (unit.health <= 0)
+        {
+            descriptionField.SetText("Unit is dead");
+            unit.hasMovedThisTurn = true;
+        }
+        else descriptionField.SetText("Unit can move once per turn.\n Cost one energy");
+        
         _isoMapManager.BeforeSwitchingMechs();
         _isoMapManager.RemoveAllSignTiles();
         currentSelectedUnit = unit;
@@ -59,6 +67,7 @@ public class UnitManager : MonoBehaviour
     
     public void CancelClickingOnUnit()
     {
+        nukeReady = false;
         currentSelectedUnit.SetStatusOfCollider(true);
         currentSelectedUnit = null;
         _isoMapManager.RemoveAllSignTiles();
@@ -71,7 +80,20 @@ public class UnitManager : MonoBehaviour
     {
         if (currentSelectedUnit != null)
         {
-            if (currentSelectedUnit.attacking > 0)
+            if (nukeReady)
+            {
+                //Enough resources
+                if (currentSelectedUnit._resourceManager.DecreaseIfEnough(res.Nuke))
+                {
+                    SoundManager.Play(1);
+                    SoundManager.Play(4);
+
+                    _enemyManager.KillAll();
+                    
+                }
+                
+            }
+            else if (currentSelectedUnit.attacking > 0)
             {
                 //Check if tile is neighbor of unit
                 if (_isoMapManager.AreNeighbors(currentSelectedUnit.position, pos))
@@ -123,7 +145,7 @@ public class UnitManager : MonoBehaviour
             }
             foreach (var mech in buildings)
             {
-                if (GetDistance(mech.position, pos) <= range - 1)returnList.Add(mech);
+                if (GetDistance(mech.position, pos) <= range + 1)returnList.Add(mech);
             }
             //Iterate over buildings
         }
@@ -226,6 +248,7 @@ public class UnitManager : MonoBehaviour
             if (mech == unit)
             {
                 mechs.Remove(mech);
+                break;
             }
         }
         
@@ -233,21 +256,51 @@ public class UnitManager : MonoBehaviour
         {
             if (mech == unit)
             {
-                mechs.Remove(mech);
+                buildings.Remove(mech);
+                break;
+
             }
         }
         foreach (var mech in _enemyManager.allEnemies)
         {
             if (mech == unit)
             {
-                mechs.Remove(mech);
+                _enemyManager.allEnemies.Remove(mech);
+                break;
             }
         }
+        foreach (var mech in _enemyManager.sleepingUnits)
+        {
+            if (mech == unit)
+            {
+                _enemyManager.sleepingUnits.Remove(mech);
+                break;
+            }
+        }
+        
+        
     }
 
     public void AttackModeTurnedOn()
     {
         _isoMapManager.ShowAttackCoordinates(currentSelectedUnit.position);
     }
-  
+
+    public bool EnemyAt(Vector2 pos)
+    {
+        foreach (var mech in _enemyManager.allEnemies)
+        {
+            if (mech.position == pos)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void Nuke()
+    {
+        _isoMapManager.ShowAttackCoordinates(currentSelectedUnit.position);
+        nukeReady = true;
+    }
 }

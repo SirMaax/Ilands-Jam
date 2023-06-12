@@ -209,6 +209,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: AllTiles-sheet 2_5
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 104
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d512b9bf05087242ba3d4f21d1cceaa
+      internalID: -773217111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -224,6 +245,7 @@ TextureImporter:
       AllTiles-sheet 2_3: 510538407
       AllTiles-sheet 2_0: 837449486
       AllTiles-sheet 2_1: -1815765833
+      AllTiles-sheet 2_5: -773217111
       AllTiles-sheet 2_4: -553824177
   spritePackingTag: 
   pSDRemoveMatte: 0

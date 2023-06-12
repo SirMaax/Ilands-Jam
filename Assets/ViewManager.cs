@@ -42,6 +42,7 @@ public class ViewManager : MonoBehaviour
 
     public void SwitchBetweenView()
     {
+        SoundManager.Play(7);
         if (inIosView)
         {
             inIosView = false;
@@ -103,7 +104,7 @@ public class ViewManager : MonoBehaviour
         }
         else
         {
-            MechResources1.SetActive(true);
+            MechResources2.SetActive(true);
             MechStuff2.SetActive(true);
         }
         allMechStuff.SetActive(true);

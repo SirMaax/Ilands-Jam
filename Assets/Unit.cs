@@ -12,7 +12,8 @@ public class Unit : MonoBehaviour
 {
     [Header("Unit Attribute")] [SerializeField]
     public Vector2 position;
-
+    public bool isIsland = false;
+    
     [SerializeField] private int typeOfUnit;
     [SerializeField] private int layerId;
     [SerializeField] public int unitId;
@@ -23,12 +24,12 @@ public class Unit : MonoBehaviour
     public bool hasMovedThisTurn = false;
     public Unit nextTarget;
     public Vector2 nextPostion;
-    private Vector2 attackingField;
+    private Vector2 attackingField = new Vector2(-1,-1);
     private bool canAttack = false;
     public int attacking = 0;
     
     [Header("General Attributes")] [SerializeField]
-    private int health;
+    public int health;
 
     [SerializeField] private int dmg;
 
@@ -43,7 +44,7 @@ public class Unit : MonoBehaviour
 
 
     [Header("REfs")] 
-    [SerializeField] private ResourceManager _resourceManager;
+    [SerializeField] public ResourceManager _resourceManager;
     [SerializeField] public IsoMapManager _isoMapManager;
     [SerializeField] public UnitManager _unitManager;
     
@@ -61,6 +62,7 @@ public class Unit : MonoBehaviour
         _boxCollider2D = GetComponent<BoxCollider2D>();
         UpdatePosition(position);
         UpdateHealth();
+        
     }
 
     public void Init()
@@ -151,6 +153,7 @@ public class Unit : MonoBehaviour
                 {
                     nextPostion = pos;
                     nextTarget = ele;
+                    attackingField = ele.position;
                     canAttack = true;
                     break;
                 }
@@ -175,9 +178,12 @@ public class Unit : MonoBehaviour
     {
         if (typeOfEnemy != 0)
         {
+            if (attackingField == new Vector2(-1, -1)) return;
             Unit temp = _unitManager.GetUnitAt(attackingField);
             if (temp != null)
             {
+                SoundManager.Play(4);
+                _isoMapManager.AddExplosion((int)attackingField.x,(int) attackingField.y,12,4);
                 temp.Damage(dmg);
             }
         }
@@ -200,17 +206,22 @@ public class Unit : MonoBehaviour
 
     private void Die()
     {
+        SoundManager.Play(1);
         if (typeOfEnemy != 0)
         {
             _unitManager.Remove(this);
             _isoMapManager.TileXisNowLongerBlocked(position);
-            Destroy(this);
+            // _isoMapManager.AddTileAt((int)position.x,(int)position.y,0,1);
+            _isoMapManager.RemoveTileAt((int)position.x, (int)position.y, 3);
+            Destroy(gameObject);
         }
         else
         {
+            _unitManager.Remove(this);
             SetStatusOfCollider(false);
             this.enabled = false;
         }
+        
         
     }
 
@@ -228,6 +239,7 @@ public class Unit : MonoBehaviour
         _unitManager.DamageBeingAt(location, 2);
         
         //Dmg Animation at location
+        SoundManager.Play(5);
         _isoMapManager.AddExplosion((int)location.x, (int)location.y, 12, 4);
         attacking = 0;
         descriptionField.SetText("");
@@ -254,6 +266,7 @@ public class Unit : MonoBehaviour
         }
         
         //Dmg Animation at location
+        SoundManager.Play(5);
         _isoMapManager.AddExplosion((int)location.x, (int)location.y, 12, 4);
         attacking = 0;
         descriptionField.SetText("");
@@ -261,6 +274,7 @@ public class Unit : MonoBehaviour
 
     public void Attack()
     {
+        if (health == 0) return;
         attacking = 1;
         _unitManager.AttackModeTurnedOn();
         descriptionField.SetText("Attack a Tile in front of the unit. Deals 2 dmg.\nCost one Steel and one Energy");
@@ -269,6 +283,7 @@ public class Unit : MonoBehaviour
 
     public void AttackRanged()
     {
+        if (health == 0) return;
         attacking = 2;
         _unitManager.AttackModeTurnedOn();
         descriptionField.SetText("Shoots a projectile in a direction. Deals 1 dmg.\nCost one Ammo and one Energy.");
@@ -277,8 +292,31 @@ public class Unit : MonoBehaviour
 
     public void UpdateHealth()
     {
-        Sprite currentSprite = hp[health];
+        Sprite currentSprite;
+        if (typeOfEnemy == 0)
+        {
+            if (health <= 0)
+            {
+                
+                currentSprite = hp[0];
+                if (mechId == 1)  mech1Overview.GetComponent<SpriteRenderer>().sprite = currentSprite; 
+                else if (mechId == 2)  mech2Overview.GetComponent<SpriteRenderer>().sprite = currentSprite;
+                Die();
+                return;
+                
+            }
+            currentSprite = hp[health];
         if (mechId == 1)  mech1Overview.GetComponent<SpriteRenderer>().sprite = currentSprite; 
-        else if (mechId == 2)  mech2Overview.GetComponent<SpriteRenderer>().sprite = currentSprite; 
+        else if (mechId == 2)  mech2Overview.GetComponent<SpriteRenderer>().sprite = currentSprite;
+        }
+    }
+
+    public void Ability()
+    {
+        //Nukes
+        descriptionField.SetText("Shot a nuke to kill every enemy on the map.");
+        if (health == 0) return;
+        _unitManager.Nuke();
+
     }
 }

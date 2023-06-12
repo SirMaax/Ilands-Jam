@@ -58,7 +58,6 @@ public class MyTile: MonoBehaviour
     public void UpdateSprite()
     {
         if (typeOfCell == 11) return;
-        Debug.Log(typeOfCell);
         if (typeOfCell == 15 && !isPowered) sp.sprite = tileVisuals.GetSprite(22);
         else sp.sprite = tileVisuals.GetSprite(typeOfCell);
     }
